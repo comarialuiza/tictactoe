@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Grid as ChakraGrid, GridItem, Button, Container, Flex } from '@chakra-ui/react';
 
 enum Turn {
     X = 'x',
@@ -10,6 +11,11 @@ interface Combos {
     down: Array<Array<number>>;
     diagonal: Array<Array<number>>;
 }
+
+// Desabilitar cliques quando o jogo tiver terminado
+// Mostrar banner do vencedor
+// Adicionar animações
+// Remover hover
 
 const Grid = () => {
     const [turn, setTurn] = useState(Turn.X);
@@ -73,13 +79,17 @@ const Grid = () => {
 
     const Cell = ({ num }: { num: number}) => {
         return (
-            <button
-                onClick={() => handleCellClick(num)}
-                disabled={ cells[num] !== null }
-                style={{ padding: '30px'}}
-            >
-                { cells[num] }
-            </button>
+            <GridItem>
+                <Button
+                    onClick={() => handleCellClick(num)}
+                    disabled={ cells[num] !== null }
+                    w='100%'
+                    bg={ cells[num] === null ? 'gray.300' : cells[num] === Turn.O ? 'pink.300' : 'orange.300'}
+                    p={ 20 }
+                >
+                    { cells[num] }
+                </Button>
+            </GridItem>
         );
     }
 
@@ -88,21 +98,27 @@ const Grid = () => {
     ) : null;
 
     return (
-        <>
-            <h2>Turn: { turn }</h2>
-            <div>
-                <Cell num={ 0 }/>
-                <Cell num={ 1 }/>
-                <Cell num={ 2 }/>
-                <Cell num={ 3 }/>
-                <Cell num={ 4 }/>
-                <Cell num={ 5 }/>
-                <Cell num={ 6 }/>
-                <Cell num={ 7 }/>
-                <Cell num={ 8 }/>
-            </div>
-            { winnerComponent }
-        </>
+        <Container>
+            <Flex h='100vh' flexDirection='column' align='center' justify='center'>
+                <h2>Turn: { turn }</h2>
+                <ChakraGrid
+                    templateRows='repeat(3, 1fr)'
+                    templateColumns='repeat(3, 1fr)'
+                    gap={ 4 }
+                >
+                    <Cell num={ 0 }/>
+                    <Cell num={ 1 }/>
+                    <Cell num={ 2 }/>
+                    <Cell num={ 3 }/>
+                    <Cell num={ 4 }/>
+                    <Cell num={ 5 }/>
+                    <Cell num={ 6 }/>
+                    <Cell num={ 7 }/>
+                    <Cell num={ 8 }/>
+                </ChakraGrid>
+                { winnerComponent }
+            </Flex>
+        </Container>
     );
 };
 
